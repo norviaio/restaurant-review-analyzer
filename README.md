@@ -59,8 +59,11 @@ https://restaurant-review-analyzer-u7dc.onrender.com/
 
 ## 画面構成
 
-/ CSVアップロード画面
+```
+/        CSVアップロード画面
 /analyze 分析結果画面
+```
+
 
 ---
 
