@@ -14,6 +14,10 @@ CSVファイルをアップロードするだけで、レビューの傾向を�
 
 https://restaurant-review-analyzer-u7dc.onrender.com/
 
+デモ用のCSVはこちらから利用できます。
+
+[sample_reviews.csv](samples/sample_reviews.csv)
+
 ---
 
 ## 主な機能
