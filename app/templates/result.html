@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>分析結果</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>分析結果</h1>
+
+      <div class="card">
+        <h2>概要</h2>
+        <div class="summary">
+          <div class="summary-item">
+            総レビュー件数
+            <strong>{{ total }}</strong>
+          </div>
+          <div class="summary-item">
+            ポジティブ
+            <strong>{{ pos }}</strong>
+          </div>
+          <div class="summary-item">
+            ネガティブ
+            <strong>{{ neg }}</strong>
+          </div>
+          <div class="summary-item">
+            ニュートラル
+            <strong>{{ neu }}</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>感情分析グラフ</h2>
+        <div class="chart">
+          <img src="/static/charts/sentiment_chart.png" alt="感情分析グラフ" />
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>頻出キーワード</h2>
+        <ul>
+          {% for keyword, count in keywords %}
+          <li>{{ keyword }}: {{ count }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <a href="/" class="back-link">← アップロード画面に戻る</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>飲食店レビュー分析ツール</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <h1>飲食店レビュー分析ツール</h1>
+        <p>
+          CSVをアップロードすると、レビュー件数・感情分析・頻出キーワードを確認できます。
+        </p>
+
+        <form action="/analyze" method="post" enctype="multipart/form-data">
+          <div class="form-group">
+            <input type="file" name="file" accept=".csv,.xlsx" required />
+          </div>
+          <button type="submit">分析する</button>
+        </form>
+
+        <p class="note">
+          ※ review_text カラムを含む CSV / Excel
+          ファイルをアップロードしてください。
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
