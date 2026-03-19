@@ -7,19 +7,23 @@ body {
 
 /* layout */
 .container {
-  max-width: 900px;
+  max-width: 800px;
   margin: 40px auto;
-  padding: 0 20px 60px;
+  padding: 20px;
 }
 
-/* card */
 .card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 24px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 12px;
 }
 
 /* headings */
@@ -69,6 +73,24 @@ button:hover {
   margin-top: 20px;
   font-size: 14px;
   color: #64748b;
+}
+
+/* score */
+.score {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.score.high {
+  color: #22c55e; /* 緑 */
+}
+
+.score.medium {
+  color: #f59e0b; /* オレンジ */
+}
+
+.score.low {
+  color: #ef4444; /* 赤 */
 }
 
 /* summary */

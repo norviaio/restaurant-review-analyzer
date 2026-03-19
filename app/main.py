@@ -23,7 +23,7 @@ def index(request: Request):
 @app.get("/analyze")
 def analyze_page():
     return RedirectResponse(url="/")
-    
+
 @app.post("/analyze", response_class=HTMLResponse)
 async def analyze(request: Request, file: UploadFile = File(...)):
     contents = await file.read()
@@ -78,7 +78,10 @@ async def analyze(request: Request, file: UploadFile = File(...)):
         reverse=True
     )
 
-    # ===== グラフ作成 =====
+    # ===== トップキーワード =====
+    top_keyword = sorted_keywords[0][0] if sorted_keywords else None
+
+    # ===== 感情分析棒グラフ作成 =====
     labels = ["Positive", "Negative", "Neutral"]
     values = [pos_count, neg_count, neu_count]
 
@@ -93,6 +96,49 @@ async def analyze(request: Request, file: UploadFile = File(...)):
     plt.savefig(chart_path)
     plt.close()
 
+    # ===== ポジネガ割合円グラフ作成 =====
+    plt.figure(figsize=(5, 5))
+    plt.pie(
+        [pos_count, neg_count],
+        labels=["Positive", "Negative"],
+        autopct="%1.1f%%"
+    )
+    plt.title("Sentiment Ratio")
+    plt.tight_layout()
+
+    pie_chart_path = "app/static/charts/pie_chart.png"
+    plt.savefig(pie_chart_path)
+    plt.close()
+
+    # ===== 分析コメント =====
+    if pos_count > neg_count:
+        comment = "全体的に評価は良好です。"
+    elif neg_count > pos_count:
+        comment = "ネガティブな意見がやや目立ちます。改善ポイントの確認が必要です。"
+    else:
+        comment = "評価は拮抗しており、良い点と改善点の両方が見られます。"
+
+    top_keyword = None
+    for k, v in sorted_keywords:
+        if v > 0:
+            top_keyword = k
+            break
+
+    if top_keyword == "接客":
+        comment += " 特に接客に関する意見が多く見られます。"
+    elif top_keyword in ["味", "料理"]:
+        comment += " 特に料理・味に関する意見が多く見られます。"
+    elif top_keyword == "提供":
+        comment += " 提供スピードに関する意見が多く見られます。"
+    elif top_keyword in ["価格", "値段"]:
+        comment += " 価格に関する意見が多く見られます。"
+    elif top_keyword in ["雰囲気", "店内"]:
+        comment += " 店内の雰囲気に関する意見が多く見られます。"
+
+    # ===== 評価 =====
+    score = (pos_count * 5 + neu_count * 3 + neg_count * 1) / total
+    score = round(score, 1)
+
     return templates.TemplateResponse(
     "result.html",
         {
@@ -101,6 +147,9 @@ async def analyze(request: Request, file: UploadFile = File(...)):
             "pos": pos_count,
             "neg": neg_count,
             "neu": neu_count,
-            "keywords": sorted_keywords
+            "keywords": sorted_keywords,
+            "comment": comment,
+            "score": score,
+            "top_keyword": top_keyword,
         }
     )

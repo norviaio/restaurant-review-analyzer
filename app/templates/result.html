@@ -33,9 +33,38 @@
       </div>
 
       <div class="card">
+        <div class="title">📝 分析コメント</div>
+        <p>{{ comment }}</p>
+      </div>
+
+      <div class="card">
+        <h2>注目ポイント</h2>
+        <p>
+          この店舗は「<strong>{{ top_keyword }}</strong
+          >」に関するレビューが多いです
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>総合評価</h2>
+        <p
+          class="score {% if score >= 4 %} high {% elif score >= 3 %} medium {% else %} low {% endif %}"
+        >
+          ⭐ {{ score }} / 5
+        </p>
+      </div>
+
+      <div class="card">
         <h2>感情分析グラフ</h2>
         <div class="chart">
           <img src="/static/charts/sentiment_chart.png" alt="感情分析グラフ" />
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>感情割合グラフ</h2>
+        <div class="chart">
+          <img src="/static/charts/pie_chart.png" alt="感情割合グラフ" />
         </div>
       </div>
 
