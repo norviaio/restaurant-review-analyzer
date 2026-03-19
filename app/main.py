@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 
 import pandas as pd
 import io
+import os
 import matplotlib.pyplot as plt
 
 app = FastAPI()

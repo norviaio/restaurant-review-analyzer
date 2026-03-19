@@ -94,7 +94,7 @@ review_text
 ## セットアップ
 
 ```bash
-git clone https://github.com/norviaio/restaurant-review-analyzer
+git clone https://github.com/norviaio/restaurant-review-analyzer.git
 cd restaurant-review-analyzer
 
 python3 -m venv venv
@@ -104,6 +104,8 @@ pip install -r requirements.txt
 
 uvicorn app.main:app --reload
 ```
+
+http://localhost:8000 にアクセス
 
 ---
 
