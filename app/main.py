@@ -1,5 +1,6 @@
 from fastapi import FastAPI, UploadFile, File, Request
 from fastapi.responses import HTMLResponse
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 
@@ -19,7 +20,10 @@ templates = Jinja2Templates(directory="app/templates")
 def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-
+@app.get("/analyze")
+def analyze_page():
+    return RedirectResponse(url="/")
+    
 @app.post("/analyze", response_class=HTMLResponse)
 async def analyze(request: Request, file: UploadFile = File(...)):
     contents = await file.read()

@@ -14,7 +14,7 @@ CSVファイルをアップロードするだけで、レビューの傾向を�
 
 ## デモ
 
-※ デプロイ後にURLを追加
+https://restaurant-review-analyzer-u7dc.onrender.com/
 
 ---
 
@@ -52,6 +52,8 @@ CSVファイルをアップロードするだけで、レビューの傾向を�
 - matplotlib
 - Jinja2
 - janome（今後拡張予定）
+
+※ 本番環境では Python 3.12 を使用しています（matplotlibの互換性対応）
 
 ---
 
