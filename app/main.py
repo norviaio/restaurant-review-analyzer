@@ -1,8 +1,9 @@
-from fastapi import FastAPI, UploadFile, File, Request
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, UploadFile, File, Request, Body
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from openai import OpenAI
 
 import pandas as pd
 import io
@@ -139,6 +140,17 @@ async def analyze(request: Request, file: UploadFile = File(...)):
     score = (pos_count * 5 + neu_count * 3 + neg_count * 1) / total
     score = round(score, 1)
 
+    # ===== AIチャット用サマリー =====
+    summary = f"""
+総レビュー数: {total}
+ポジティブ: {pos_count}
+ネガティブ: {neg_count}
+ニュートラル: {neu_count}
+主要キーワード: {', '.join([k for k, v in sorted_keywords[:3]])}
+総合評価: {score} / 5
+分析コメント: {comment}
+"""
+
     return templates.TemplateResponse(
     "result.html",
         {
@@ -151,5 +163,41 @@ async def analyze(request: Request, file: UploadFile = File(...)):
             "comment": comment,
             "score": score,
             "top_keyword": top_keyword,
+            "summary": summary,
         }
     )
+
+# ===== AIチャット =========================
+client = OpenAI()
+
+@app.post("/chat")
+async def chat(summary: str = Body(...), question: str = Body(...)):
+    try:    
+        prompt = f"""
+以下は飲食店レビュー分析の結果です。
+
+{summary}
+
+この結果をもとに質問に答えてください。
+
+質問: {question}
+"""
+
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "user", "content": prompt}
+            ]
+        )
+
+        return {
+            "answer": response.choices[0].message.content
+        }
+
+    except Exception as e:
+        print("CHAT ERROR:", e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": str(e)}
+        )
+        

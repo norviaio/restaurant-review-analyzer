@@ -77,6 +77,195 @@
         </ul>
       </div>
 
+      <div class="card">
+        <h2>🤖 AIに質問</h2>
+        <p class="ai-help">
+          分析結果をもとに、改善ポイントや傾向をAIに質問できます。
+        </p>
+
+        <div class="ai-chat">
+          <div class="ai-suggestions">
+            <button
+              type="button"
+              class="ai-suggestion"
+              onclick="setQuestion('この店舗の改善ポイントを教えて')"
+            >
+              改善ポイント
+            </button>
+            <button
+              type="button"
+              class="ai-suggestion"
+              onclick="setQuestion('接客に関する傾向を教えて')"
+            >
+              接客分析
+            </button>
+            <button
+              type="button"
+              class="ai-suggestion"
+              onclick="setQuestion('ネガティブレビューの原因を整理して')"
+            >
+              ネガ原因
+            </button>
+          </div>
+
+          <div id="chat-history" class="chat-history"></div>
+
+          <textarea
+            id="question"
+            class="ai-textarea"
+            rows="3"
+            placeholder="質問を入力..."
+          ></textarea>
+
+          <button type="button" class="ai-button" onclick="askAI()">
+            送信
+          </button>
+        </div>
+      </div>
+
+      <script>
+        function addMessage(role, text) {
+          const chat = document.getElementById("chat-history");
+
+          const wrapper = document.createElement("div");
+          wrapper.className = role === "user" ? "chat-row user" : "chat-row ai";
+
+          const icon = document.createElement("div");
+          icon.className = "chat-icon";
+          icon.innerText = role === "user" ? "🙂" : "🤖";
+
+          const bubble = document.createElement("div");
+          bubble.className = role === "user" ? "chat user" : "chat ai";
+          bubble.innerText = text;
+
+          wrapper.appendChild(icon);
+          wrapper.appendChild(bubble);
+          chat.appendChild(wrapper);
+
+          chat.scrollTop = chat.scrollHeight;
+        }
+
+        function setQuestion(text) {
+          document.getElementById("question").value = text;
+        }
+
+        function askFromSuggestion(text) {
+          document.getElementById("question").value = text;
+          askAI();
+        }
+
+        let loadingMessage = null;
+
+        async function askAI() {
+          const input = document.getElementById("question");
+          const question = input.value.trim();
+          const summary = `{{ summary }}`;
+
+          if (!question) return;
+
+          addMessage("user", question);
+          input.value = "";
+
+          const chat = document.getElementById("chat-history");
+          loadingMessage = document.createElement("div");
+          loadingMessage.className = "chat-row ai";
+
+          const icon = document.createElement("div");
+          icon.className = "chat-icon";
+          icon.innerText = "🤖";
+
+          const bubble = document.createElement("div");
+          bubble.className = "chat ai";
+          bubble.innerText = "考え中...";
+
+          loadingMessage.appendChild(icon);
+          loadingMessage.appendChild(bubble);
+          chat.appendChild(loadingMessage);
+          chat.scrollTop = chat.scrollHeight;
+
+          try {
+            const res = await fetch("/chat", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                summary: summary,
+                question: question,
+              }),
+            });
+
+            const data = await res.json();
+
+            if (loadingMessage) {
+              loadingMessage.remove();
+              loadingMessage = null;
+            }
+
+            if (!res.ok) {
+              addMessage(
+                "ai",
+                "エラー: " + (data.error || "AI回答の取得に失敗しました"),
+              );
+              return;
+            }
+
+            addMessage("ai", data.answer);
+
+            renderFollowupSuggestions();
+          } catch (e) {
+            if (loadingMessage) {
+              loadingMessage.remove();
+              loadingMessage = null;
+            }
+            addMessage(
+              "ai",
+              "通信エラーが発生しました。時間をおいて再度お試しください。",
+            );
+          }
+        }
+
+        function renderFollowupSuggestions() {
+          const chat = document.getElementById("chat-history");
+
+          const container = document.createElement("div");
+          container.className = "followup-container";
+
+          container.innerHTML = `
+    <button onclick="askFromSuggestion('接客について詳しく教えて')">
+      接客を深掘り
+    </button>
+    <button onclick="askFromSuggestion('味や料理に関する改善点を教えて')">
+      味・料理を深掘り
+    </button>
+    <button onclick="askFromSuggestion('この店舗の強みを教えて')">
+      強みを確認
+    </button>
+  `;
+
+          chat.appendChild(container);
+          chat.scrollTop = chat.scrollHeight;
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+          const input = document.getElementById("question");
+
+          input.addEventListener("keydown", function (e) {
+            if (e.isComposing || e.keyCode === 229) return;
+
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              askAI();
+            }
+          });
+
+          addMessage(
+            "ai",
+            "分析結果について何でも聞いてください。改善ポイントや接客の傾向なども答えられます。",
+          );
+        });
+      </script>
+
       <a href="/" class="back-link">← アップロード画面に戻る</a>
     </div>
   </body>
