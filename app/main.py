@@ -172,7 +172,13 @@ client = OpenAI()
 
 @app.post("/chat")
 async def chat(summary: str = Body(...), question: str = Body(...)):
-    try:    
+    if not summary.strip() or not question.strip():
+        return JSONResponse(
+            status_code=400,
+            content={"error": "入力が空です"}
+        )
+
+    try:
         prompt = f"""
 以下は飲食店レビュー分析の結果です。
 
@@ -199,5 +205,4 @@ async def chat(summary: str = Body(...), question: str = Body(...)):
         return JSONResponse(
             status_code=500,
             content={"error": str(e)}
-        )
-        
+        )        

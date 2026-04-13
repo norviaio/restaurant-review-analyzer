@@ -161,7 +161,10 @@
           const question = input.value.trim();
           const summary = `{{ summary }}`;
 
-          if (!question) return;
+          if (!question) {
+            addMessage("ai", "質問を入力してください");
+            return;
+          }
 
           addMessage("user", question);
           input.value = "";
