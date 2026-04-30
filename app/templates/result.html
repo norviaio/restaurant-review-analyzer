@@ -110,6 +110,18 @@
 
           <div id="chat-history" class="chat-history"></div>
 
+          <div class="ai-characters">
+            <button onclick="setCharacter('default', this)">
+              分析アシスタント
+            </button>
+            <button onclick="setCharacter('friendly', this)">
+              フレンドリー
+            </button>
+            <button onclick="setCharacter('butler', this)">執事</button>
+            <button onclick="setCharacter('host', this)">ホスト</button>
+            <button onclick="setCharacter('tsundere', this)">ツンデレ</button>
+          </div>
+
           <textarea
             id="question"
             class="ai-textarea"
@@ -127,20 +139,25 @@
         function addMessage(role, text) {
           const chat = document.getElementById("chat-history");
 
-          const wrapper = document.createElement("div");
-          wrapper.className = role === "user" ? "chat-row user" : "chat-row ai";
+          const row = document.createElement("div");
 
-          const icon = document.createElement("div");
-          icon.className = "chat-icon";
-          icon.innerText = role === "user" ? "🙂" : "🤖";
+          row.className = role === "user" ? "chat-row user" : "chat-row ai";
 
-          const bubble = document.createElement("div");
-          bubble.className = role === "user" ? "chat user" : "chat ai";
-          bubble.innerText = text;
+          if (role === "user") {
+            row.innerHTML = `<div class="chat user">${text}</div>`;
+          } else {
+            const char = characterInfo[currentCharacter];
 
-          wrapper.appendChild(icon);
-          wrapper.appendChild(bubble);
-          chat.appendChild(wrapper);
+            row.innerHTML = `
+              <div class="chat-icon">${char.icon}</div>
+              <div class="chat ai ${char.class}">
+                <div class="chat-name">${char.name}</div>
+                <div class="chat-text">${text}</div>
+              </div>
+            `;
+          }
+
+          chat.appendChild(row);
 
           chat.scrollTop = chat.scrollHeight;
         }
@@ -154,6 +171,32 @@
           askAI();
         }
 
+        function setCharacter(type, button) {
+          currentCharacter = type;
+
+          document.querySelectorAll(".ai-characters button").forEach((btn) => {
+            btn.classList.remove("active");
+          });
+
+          button.classList.add("active");
+        }
+
+        const characterInfo = {
+          default: {
+            icon: "🤖",
+            name: "分析アシスタント",
+            class: "char-default",
+          },
+          friendly: {
+            icon: "😄",
+            name: "フレンドリー",
+            class: "char-friendly",
+          },
+          butler: { icon: "🎩", name: "執事", class: "char-butler" },
+          host: { icon: "🥂", name: "ホスト", class: "char-host" },
+          tsundere: { icon: "😒", name: "ツンデレ", class: "char-tsundere" },
+        };
+        let currentCharacter = "default";
         let loadingMessage = null;
 
         async function askAI() {
@@ -173,16 +216,19 @@
           loadingMessage = document.createElement("div");
           loadingMessage.className = "chat-row ai";
 
-          const icon = document.createElement("div");
-          icon.className = "chat-icon";
-          icon.innerText = "🤖";
+          loadingMessage = document.createElement("div");
+          loadingMessage.className = "chat-row ai";
 
-          const bubble = document.createElement("div");
-          bubble.className = "chat ai";
-          bubble.innerText = "考え中...";
+          const char = characterInfo[currentCharacter];
 
-          loadingMessage.appendChild(icon);
-          loadingMessage.appendChild(bubble);
+          loadingMessage.innerHTML = `
+            <div class="chat-icon">${char.icon}</div>
+            <div class="chat ai ${char.class}">
+              <div class="chat-name">${char.name}</div>
+              <div class="chat-text loading">考え中</div>
+            </div>
+          `;
+
           chat.appendChild(loadingMessage);
           chat.scrollTop = chat.scrollHeight;
 
@@ -195,6 +241,7 @@
               body: JSON.stringify({
                 summary: summary,
                 question: question,
+                character: currentCharacter,
               }),
             });
 
@@ -251,6 +298,12 @@
         }
 
         window.addEventListener("DOMContentLoaded", () => {
+          const defaultButton = document.querySelector(".ai-characters button");
+
+          if (defaultButton) {
+            defaultButton.classList.add("active");
+          }
+
           const input = document.getElementById("question");
 
           input.addEventListener("keydown", function (e) {
