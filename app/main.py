@@ -10,6 +10,8 @@ import io
 import os
 import matplotlib.pyplot as plt
 
+css_version = int(os.path.getmtime("app/static/css/style.css"))
+
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
@@ -19,7 +21,14 @@ templates = Jinja2Templates(directory="app/templates")
 
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    css_version = int(os.path.getmtime("app/static/css/style.css"))
+    return templates.TemplateResponse(
+        "index.html",
+        {
+            "request": request,
+            "css_version": css_version,
+        }
+    )
 
 @app.get("/analyze")
 def analyze_page():
@@ -154,6 +163,7 @@ async def analyze(request: Request, file: UploadFile = File(...)):
     return templates.TemplateResponse(
     "result.html",
         {
+            "css_version": css_version,
             "request": request,
             "total": total,
             "pos": pos_count,
