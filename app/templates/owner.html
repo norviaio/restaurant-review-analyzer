@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>店舗オーナー向け | Restaurant Review Analyzer</title>
+    <link rel="stylesheet" href="/static/css/style.css?v={{ css_version }}" />
+  </head>
+
+  <body class="owner-page">
+    <header class="owner-header">
+      <a href="/" class="owner-logo">Restaurant Review Analyzer</a>
+      <a href="/consumer" class="owner-nav">一般ユーザー向け</a>
+    </header>
+
+    <main>
+      <section class="owner-hero">
+        <div class="owner-hero-image">
+          <img src="/static/images/owner-hero.jpg" alt="店舗スタッフの写真" />
+        </div>
+
+        <div class="owner-hero-content">
+          <p class="owner-label">For Owners</p>
+          <h1>レビューを、<br />次の改善につなげる。</h1>
+          <p class="owner-lead">
+            CSVをアップロードするだけで、レビューの傾向を可視化。
+            AIチャットで改善ポイントも深掘りできます。
+          </p>
+        </div>
+      </section>
+
+      <section class="owner-section">
+        <div class="owner-upload-card">
+          <div>
+            <p class="owner-label">Upload CSV</p>
+            <h2>レビューCSVをアップロード</h2>
+            <p>
+              `review_text` カラムを含むCSVをアップロードすると、
+              感情分析・キーワード抽出・AIチャットを利用できます。
+            </p>
+          </div>
+
+          <form
+            action="/analyze"
+            method="post"
+            enctype="multipart/form-data"
+            class="owner-form"
+          >
+            <input type="file" name="file" accept=".csv" required />
+            <button type="submit">分析を開始する</button>
+          </form>
+
+          <a
+            href="/static/samples/sample_reviews.csv"
+            class="owner-sample-link"
+          >
+            サンプルCSVをダウンロード
+          </a>
+        </div>
+      </section>
+
+      <section class="owner-section">
+        <h2 class="owner-section-title">できること</h2>
+
+        <div class="owner-feature-grid">
+          <div class="owner-feature-card">
+            <div class="feature-title">
+              <span>📊</span>
+              <h3>傾向を可視化</h3>
+            </div>
+            <p>Positive / Negative / Neutral の割合やスコアを確認できます。</p>
+          </div>
+
+          <div class="owner-feature-card">
+            <div class="feature-title">
+              <span>🔍</span>
+              <h3>注目キーワード抽出</h3>
+            </div>
+            <p>料理・接客・価格など、レビュー内で多い話題を把握できます。</p>
+          </div>
+
+          <div class="owner-feature-card">
+            <div class="feature-title">
+              <span>🤖</span>
+              <h3>AIチャットで深掘り</h3>
+            </div>
+            <p>改善ポイントや強みを、会話形式で確認できます。</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="owner-footer">© Restaurant Review Analyzer</footer>
+  </body>
+</html>

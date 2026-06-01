@@ -3,6 +3,8 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from pathlib import Path
+from dotenv import load_dotenv
 from openai import OpenAI
 
 import pandas as pd
@@ -24,6 +26,42 @@ def index(request: Request):
     css_version = int(os.path.getmtime("app/static/css/style.css"))
     return templates.TemplateResponse(
         "index.html",
+        {
+            "request": request,
+            "css_version": css_version,
+        }
+    )
+
+@app.get("/consumer", response_class=HTMLResponse)
+def consumer(request: Request):
+    css_version = int(os.path.getmtime("app/static/css/style.css"))
+
+    return templates.TemplateResponse(
+        "consumer.html",
+        {
+            "request": request,
+            "css_version": css_version,
+        }
+    )
+
+@app.get("/consumer-chat", response_class=HTMLResponse)
+def consumer_chat(request: Request):
+    css_version = int(os.path.getmtime("app/static/css/style.css"))
+
+    return templates.TemplateResponse(
+        "consumer_chat.html",
+        {
+            "request": request,
+            "css_version": css_version,
+        }
+    )
+
+@app.get("/owner", response_class=HTMLResponse)
+def owner(request: Request):
+    css_version = int(os.path.getmtime("app/static/css/style.css"))
+
+    return templates.TemplateResponse(
+        "owner.html",
         {
             "request": request,
             "css_version": css_version,
@@ -178,6 +216,8 @@ async def analyze(request: Request, file: UploadFile = File(...)):
     )
 
 # ===== AIチャット =========================
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 client = OpenAI()
 
 @app.post("/chat")

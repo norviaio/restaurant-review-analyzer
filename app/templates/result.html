@@ -3,326 +3,333 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>分析結果</title>
+    <title>分析結果 | Restaurant Review Analyzer</title>
     <link rel="stylesheet" href="/static/css/style.css?v={{ css_version }}" />
   </head>
-  <body>
-    <div class="container">
-      <h1>分析結果</h1>
 
-      <div class="card">
-        <h2>概要</h2>
-        <div class="summary">
-          <div class="summary-item">
-            総レビュー件数
+  <body class="result-page">
+    <header class="result-header">
+      <a href="/" class="result-logo">Restaurant Review Analyzer</a>
+      <a href="/owner" class="result-nav">店舗オーナー向けへ戻る</a>
+    </header>
+
+    <main>
+      <section class="result-hero">
+        <p class="result-label">Analysis Result</p>
+        <h1>レビュー分析結果</h1>
+        <p>
+          アップロードされたレビューをもとに、評価・傾向・改善ポイントを可視化しました。
+        </p>
+      </section>
+
+      <section class="result-section">
+        <div class="result-summary-grid">
+          <div class="result-summary-card">
+            <span>総レビュー件数</span>
             <strong>{{ total }}</strong>
           </div>
-          <div class="summary-item">
-            ポジティブ
+          <div class="result-summary-card">
+            <span>ポジティブ</span>
             <strong>{{ pos }}</strong>
           </div>
-          <div class="summary-item">
-            ネガティブ
+          <div class="result-summary-card">
+            <span>ネガティブ</span>
             <strong>{{ neg }}</strong>
           </div>
-          <div class="summary-item">
-            ニュートラル
+          <div class="result-summary-card">
+            <span>ニュートラル</span>
             <strong>{{ neu }}</strong>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="card">
-        <div class="title">📝 分析コメント</div>
-        <p>{{ comment }}</p>
-      </div>
-
-      <div class="card">
-        <h2>注目ポイント</h2>
-        <p>
-          この店舗は「<strong>{{ top_keyword }}</strong
-          >」に関するレビューが多いです
-        </p>
-      </div>
-
-      <div class="card">
-        <h2>総合評価</h2>
-        <p
-          class="score {% if score >= 4 %} high {% elif score >= 3 %} medium {% else %} low {% endif %}"
-        >
-          ⭐ {{ score }} / 5
-        </p>
-      </div>
-
-      <div class="card">
-        <h2>感情分析グラフ</h2>
-        <div class="chart">
-          <img src="/static/charts/sentiment_chart.png" alt="感情分析グラフ" />
+      <section class="result-section result-grid">
+        <div class="result-card result-main-card">
+          <p class="result-label">Score</p>
+          <h2>総合評価</h2>
+          <p
+            class="score {% if score >= 4 %} high {% elif score >= 3 %} medium {% else %} low {% endif %}"
+          >
+            ⭐ {{ score }} / 5
+          </p>
         </div>
-      </div>
 
-      <div class="card">
-        <h2>感情割合グラフ</h2>
-        <div class="chart">
-          <img src="/static/charts/pie_chart.png" alt="感情割合グラフ" />
+        <div class="result-card">
+          <p class="result-label">Comment</p>
+          <h2>分析コメント</h2>
+          <p>{{ comment }}</p>
         </div>
-      </div>
 
-      <div class="card">
-        <h2>頻出キーワード</h2>
-        <ul>
-          {% for keyword, count in keywords %}
-          <li>{{ keyword }}: {{ count }}</li>
-          {% endfor %}
-        </ul>
-      </div>
+        <div class="result-card">
+          <p class="result-label">Keyword</p>
+          <h2>注目ポイント</h2>
+          <p>
+            この店舗は「<strong>{{ top_keyword }}</strong
+            >」に関するレビューが多いです。
+          </p>
+        </div>
+      </section>
 
-      <div class="card">
-        <h2>🤖 AIに質問</h2>
-        <p class="ai-help">
-          分析結果をもとに、改善ポイントや傾向をAIに質問できます。
-        </p>
+      <section class="result-section result-chart-grid">
+        <div class="result-card">
+          <h2>感情分析グラフ</h2>
+          <div class="chart">
+            <img
+              src="/static/charts/sentiment_chart.png"
+              alt="感情分析グラフ"
+            />
+          </div>
+        </div>
 
-        <div class="ai-chat">
-          <div class="ai-suggestions">
-            <button
-              type="button"
-              class="ai-suggestion"
-              onclick="setQuestion('この店舗の改善ポイントを教えて')"
-            >
-              改善ポイント
-            </button>
-            <button
-              type="button"
-              class="ai-suggestion"
-              onclick="setQuestion('接客に関する傾向を教えて')"
-            >
-              接客分析
-            </button>
-            <button
-              type="button"
-              class="ai-suggestion"
-              onclick="setQuestion('ネガティブレビューの原因を整理して')"
-            >
-              ネガ原因
+        <div class="result-card">
+          <h2>感情割合グラフ</h2>
+          <div class="chart">
+            <img src="/static/charts/pie_chart.png" alt="感情割合グラフ" />
+          </div>
+        </div>
+      </section>
+
+      <section class="result-section">
+        <div class="result-card">
+          <h2>頻出キーワード</h2>
+          <div class="keyword-list">
+            {% for keyword, count in keywords %}
+            <span>{{ keyword }}：{{ count }}</span>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+
+      <section class="result-section">
+        <div class="result-card result-ai-card">
+          <p class="result-label">AI Chat</p>
+          <h2>🤖 AIに質問</h2>
+          <p class="ai-help">
+            分析結果をもとに、改善ポイントや傾向をAIに質問できます。
+          </p>
+
+          <div class="ai-chat">
+            <div class="ai-suggestions">
+              <button
+                type="button"
+                class="ai-suggestion"
+                onclick="setQuestion('この店舗の改善ポイントを教えて')"
+              >
+                改善ポイント
+              </button>
+              <button
+                type="button"
+                class="ai-suggestion"
+                onclick="setQuestion('接客に関する傾向を教えて')"
+              >
+                接客分析
+              </button>
+              <button
+                type="button"
+                class="ai-suggestion"
+                onclick="setQuestion('ネガティブレビューの原因を整理して')"
+              >
+                ネガ原因
+              </button>
+            </div>
+
+            <div id="chat-history" class="chat-history"></div>
+
+            <div class="ai-characters">
+              <button onclick="setCharacter('default', this)">
+                分析アシスタント
+              </button>
+              <button onclick="setCharacter('friendly', this)">
+                フレンドリー
+              </button>
+              <button onclick="setCharacter('butler', this)">執事</button>
+              <button onclick="setCharacter('host', this)">ホスト</button>
+              <button onclick="setCharacter('tsundere', this)">ツンデレ</button>
+            </div>
+
+            <textarea
+              id="question"
+              class="ai-textarea"
+              rows="3"
+              placeholder="質問を入力..."
+            ></textarea>
+
+            <button type="button" class="ai-button" onclick="askAI()">
+              送信
             </button>
           </div>
-
-          <div id="chat-history" class="chat-history"></div>
-
-          <div class="ai-characters">
-            <button onclick="setCharacter('default', this)">
-              分析アシスタント
-            </button>
-            <button onclick="setCharacter('friendly', this)">
-              フレンドリー
-            </button>
-            <button onclick="setCharacter('butler', this)">執事</button>
-            <button onclick="setCharacter('host', this)">ホスト</button>
-            <button onclick="setCharacter('tsundere', this)">ツンデレ</button>
-          </div>
-
-          <textarea
-            id="question"
-            class="ai-textarea"
-            rows="3"
-            placeholder="質問を入力..."
-          ></textarea>
-
-          <button type="button" class="ai-button" onclick="askAI()">
-            送信
-          </button>
         </div>
-      </div>
+      </section>
 
-      <script>
-        function addMessage(role, text) {
-          const chat = document.getElementById("chat-history");
+      <section class="result-section result-actions">
+        <a href="/owner" class="result-back-button">← 別のCSVを分析する</a>
+      </section>
+    </main>
 
-          const row = document.createElement("div");
+    <footer class="result-footer">© Restaurant Review Analyzer</footer>
 
-          row.className = role === "user" ? "chat-row user" : "chat-row ai";
+    <script>
+      function addMessage(role, text) {
+        const chat = document.getElementById("chat-history");
+        const row = document.createElement("div");
+        row.className = role === "user" ? "chat-row user" : "chat-row ai";
 
-          if (role === "user") {
-            row.innerHTML = `<div class="chat user">${text}</div>`;
-          } else {
-            const char = characterInfo[currentCharacter];
-
-            row.innerHTML = `
-              <div class="chat-icon">${char.icon}</div>
-              <div class="chat ai ${char.class}">
-                <div class="chat-name">${char.name}</div>
-                <div class="chat-text">${text}</div>
-              </div>
-            `;
-          }
-
-          chat.appendChild(row);
-
-          chat.scrollTop = chat.scrollHeight;
-        }
-
-        function setQuestion(text) {
-          document.getElementById("question").value = text;
-        }
-
-        function askFromSuggestion(text) {
-          document.getElementById("question").value = text;
-          askAI();
-        }
-
-        function setCharacter(type, button) {
-          currentCharacter = type;
-
-          document.querySelectorAll(".ai-characters button").forEach((btn) => {
-            btn.classList.remove("active");
-          });
-
-          button.classList.add("active");
-        }
-
-        const characterInfo = {
-          default: {
-            icon: "🤖",
-            name: "分析アシスタント",
-            class: "char-default",
-          },
-          friendly: {
-            icon: "😄",
-            name: "フレンドリー",
-            class: "char-friendly",
-          },
-          butler: { icon: "🎩", name: "執事", class: "char-butler" },
-          host: { icon: "🥂", name: "ホスト", class: "char-host" },
-          tsundere: { icon: "😒", name: "ツンデレ", class: "char-tsundere" },
-        };
-        let currentCharacter = "default";
-        let loadingMessage = null;
-
-        async function askAI() {
-          const input = document.getElementById("question");
-          const question = input.value.trim();
-          const summary = `{{ summary }}`;
-
-          if (!question) {
-            addMessage("ai", "質問を入力してください");
-            return;
-          }
-
-          addMessage("user", question);
-          input.value = "";
-
-          const chat = document.getElementById("chat-history");
-          loadingMessage = document.createElement("div");
-          loadingMessage.className = "chat-row ai";
-
-          loadingMessage = document.createElement("div");
-          loadingMessage.className = "chat-row ai";
-
+        if (role === "user") {
+          row.innerHTML = `<div class="chat user">${text}</div>`;
+        } else {
           const char = characterInfo[currentCharacter];
-
-          loadingMessage.innerHTML = `
+          row.innerHTML = `
             <div class="chat-icon">${char.icon}</div>
             <div class="chat ai ${char.class}">
               <div class="chat-name">${char.name}</div>
-              <div class="chat-text loading">考え中</div>
+              <div class="chat-text">${text}</div>
             </div>
           `;
+        }
 
-          chat.appendChild(loadingMessage);
-          chat.scrollTop = chat.scrollHeight;
+        chat.appendChild(row);
+        chat.scrollTop = chat.scrollHeight;
+      }
 
-          try {
-            const res = await fetch("/chat", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                summary: summary,
-                question: question,
-                character: currentCharacter,
-              }),
-            });
+      function setQuestion(text) {
+        document.getElementById("question").value = text;
+      }
 
-            const data = await res.json();
+      function askFromSuggestion(text) {
+        document.getElementById("question").value = text;
+        askAI();
+      }
 
-            if (loadingMessage) {
-              loadingMessage.remove();
-              loadingMessage = null;
-            }
+      function setCharacter(type, button) {
+        currentCharacter = type;
 
-            if (!res.ok) {
-              addMessage(
-                "ai",
-                "エラー: " + (data.error || "AI回答の取得に失敗しました"),
-              );
-              return;
-            }
+        document.querySelectorAll(".ai-characters button").forEach((btn) => {
+          btn.classList.remove("active");
+        });
 
-            addMessage("ai", data.answer);
+        button.classList.add("active");
+      }
 
-            renderFollowupSuggestions();
-          } catch (e) {
-            if (loadingMessage) {
-              loadingMessage.remove();
-              loadingMessage = null;
-            }
+      const characterInfo = {
+        default: {
+          icon: "🤖",
+          name: "分析アシスタント",
+          class: "char-default",
+        },
+        friendly: { icon: "😄", name: "フレンドリー", class: "char-friendly" },
+        butler: { icon: "🎩", name: "執事", class: "char-butler" },
+        host: { icon: "🥂", name: "ホスト", class: "char-host" },
+        tsundere: { icon: "😒", name: "ツンデレ", class: "char-tsundere" },
+      };
+
+      let currentCharacter = "default";
+      let loadingMessage = null;
+
+      async function askAI() {
+        const input = document.getElementById("question");
+        const question = input.value.trim();
+        const summary = `{{ summary }}`;
+
+        if (!question) {
+          addMessage("ai", "質問を入力してください");
+          return;
+        }
+
+        addMessage("user", question);
+        input.value = "";
+
+        const chat = document.getElementById("chat-history");
+        const char = characterInfo[currentCharacter];
+
+        loadingMessage = document.createElement("div");
+        loadingMessage.className = "chat-row ai";
+        loadingMessage.innerHTML = `
+          <div class="chat-icon">${char.icon}</div>
+          <div class="chat ai ${char.class}">
+            <div class="chat-name">${char.name}</div>
+            <div class="chat-text loading">考え中</div>
+          </div>
+        `;
+
+        chat.appendChild(loadingMessage);
+        chat.scrollTop = chat.scrollHeight;
+
+        try {
+          const res = await fetch("/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              summary: summary,
+              question: question,
+              character: currentCharacter,
+            }),
+          });
+
+          const data = await res.json();
+
+          if (loadingMessage) {
+            loadingMessage.remove();
+            loadingMessage = null;
+          }
+
+          if (!res.ok) {
             addMessage(
               "ai",
-              "通信エラーが発生しました。時間をおいて再度お試しください。",
+              "エラー: " + (data.error || "AI回答の取得に失敗しました"),
             );
-          }
-        }
-
-        function renderFollowupSuggestions() {
-          const chat = document.getElementById("chat-history");
-
-          const container = document.createElement("div");
-          container.className = "followup-container";
-
-          container.innerHTML = `
-    <button onclick="askFromSuggestion('接客について詳しく教えて')">
-      接客を深掘り
-    </button>
-    <button onclick="askFromSuggestion('味や料理に関する改善点を教えて')">
-      味・料理を深掘り
-    </button>
-    <button onclick="askFromSuggestion('この店舗の強みを教えて')">
-      強みを確認
-    </button>
-  `;
-
-          chat.appendChild(container);
-          chat.scrollTop = chat.scrollHeight;
-        }
-
-        window.addEventListener("DOMContentLoaded", () => {
-          const defaultButton = document.querySelector(".ai-characters button");
-
-          if (defaultButton) {
-            defaultButton.classList.add("active");
+            return;
           }
 
-          const input = document.getElementById("question");
-
-          input.addEventListener("keydown", function (e) {
-            if (e.isComposing || e.keyCode === 229) return;
-
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              askAI();
-            }
-          });
+          addMessage("ai", data.answer);
+          renderFollowupSuggestions();
+        } catch (e) {
+          if (loadingMessage) {
+            loadingMessage.remove();
+            loadingMessage = null;
+          }
 
           addMessage(
             "ai",
-            "分析結果について何でも聞いてください。改善ポイントや接客の傾向なども答えられます。",
+            "通信エラーが発生しました。時間をおいて再度お試しください。",
           );
-        });
-      </script>
+        }
+      }
 
-      <a href="/" class="back-link">← アップロード画面に戻る</a>
-    </div>
+      function renderFollowupSuggestions() {
+        const chat = document.getElementById("chat-history");
+        const container = document.createElement("div");
+        container.className = "followup-container";
+
+        container.innerHTML = `
+          <button onclick="askFromSuggestion('接客について詳しく教えて')">接客を深掘り</button>
+          <button onclick="askFromSuggestion('味や料理に関する改善点を教えて')">味・料理を深掘り</button>
+          <button onclick="askFromSuggestion('この店舗の強みを教えて')">強みを確認</button>
+        `;
+
+        chat.appendChild(container);
+        chat.scrollTop = chat.scrollHeight;
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        const defaultButton = document.querySelector(".ai-characters button");
+        if (defaultButton) defaultButton.classList.add("active");
+
+        const input = document.getElementById("question");
+
+        input.addEventListener("keydown", function (e) {
+          if (e.isComposing || e.keyCode === 229) return;
+
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            askAI();
+          }
+        });
+
+        addMessage(
+          "ai",
+          "分析結果について何でも聞いてください。改善ポイントや接客の傾向なども答えられます。",
+        );
+      });
+    </script>
   </body>
 </html>

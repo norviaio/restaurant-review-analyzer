@@ -3,29 +3,69 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>飲食店レビュー分析ツール</title>
+    <title>Restaurant Review Analyzer</title>
     <link rel="stylesheet" href="/static/css/style.css?v={{ css_version }}" />
   </head>
-  <body>
-    <div class="container">
-      <div class="card">
-        <h1>飲食店レビュー分析ツール</h1>
-        <p>
-          CSVをアップロードすると、レビュー件数・感情分析・頻出キーワードを確認できます。
-        </p>
 
-        <form action="/analyze" method="post" enctype="multipart/form-data">
-          <div class="form-group">
-            <input type="file" name="file" accept=".csv,.xlsx" required />
-          </div>
-          <button type="submit">分析する</button>
-        </form>
+  <body class="top-page">
+    <header class="top-header">
+      <div class="top-logo">Restaurant Review Analyzer</div>
+      <p class="top-copy">口コミの力で、お店選びもお店づくりももっと良く。</p>
+    </header>
 
-        <p class="note">
-          ※ review_text カラムを含む CSV / Excel
-          ファイルをアップロードしてください。
-        </p>
-      </div>
-    </div>
+    <main class="top-main">
+      <section class="top-panel top-panel-consumer">
+        <div class="top-image">
+          <img src="/static/images/top-consumer-food.jpg" alt="料理の写真" />
+        </div>
+        <div class="top-wave top-wave-consumer">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+            <path d="M0,42 C25,62 75,62 100,42 L100,100 L0,100 Z"></path>
+          </svg>
+        </div>
+
+        <div class="top-card">
+          <p class="top-label">For Users</p>
+          <h1>口コミから<br />いいお店を見つける</h1>
+          <span class="top-line"></span>
+          <p class="top-text">
+            実際の口コミをもとに、あなたにぴったりのお店や料理のヒントを見つけられます。
+          </p>
+          <a href="/consumer" class="top-button top-button-consumer">
+            一般ユーザーはこちら
+          </a>
+        </div>
+      </section>
+
+      <section class="top-panel top-panel-owner">
+        <div class="top-image">
+          <img
+            src="/static/images/top-owner-chef.jpg"
+            alt="店舗スタッフの写真"
+          />
+        </div>
+        <div class="top-wave top-wave-owner">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+            <path d="M0,42 C25,62 75,62 100,42 L100,100 L0,100 Z"></path>
+          </svg>
+        </div>
+
+        <div class="top-card">
+          <p class="top-label">For Owners</p>
+          <h1>レビューを<br />改善につなげる</h1>
+          <span class="top-line"></span>
+          <p class="top-text">
+            CSVをアップロードして、感情分析やキーワード抽出、AIチャットでお店の改善に役立てられます。
+          </p>
+          <a href="/owner" class="top-button top-button-owner">
+            店舗オーナーはこちら
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="top-footer">
+      <small>&copy; Restaurant Review Analyzer</small>
+    </footer>
   </body>
 </html>
